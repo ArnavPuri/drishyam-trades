@@ -1,4 +1,5 @@
 console.log("Updating trades");
+let runningPnL = 0;
 class Trade {
   // Trade has instrument, buyPrice, sellPrice, qty, profit or loss
   constructor(buyObj) {
@@ -58,6 +59,7 @@ class Trade {
 }
 
 let sleep = (time) => new Promise((res, rej) => setTimeout(() => res(), time));
+
 setTimeout(async () => {
   let showAllBtn = document.querySelector("table td.show-all-col > a");
   if (showAllBtn !== null) {
@@ -129,9 +131,10 @@ const cleanTimeStr = (timeStr = "") => {
   trimmedTime.pop();
   return trimmedTime.join("");
 };
-
+let globalTableRef = null;
 function createTradeTable(allTrades = [new Trade({})]) {
   let tableContainer = document.createElement("div");
+  globalTableRef = tableContainer;
   tableContainer.classList.add("summary-container");
 
   let newTable = document.createElement("table");
@@ -160,9 +163,15 @@ function createTradeSummary(winTrades, loseTrades) {
     const loseAmount = Number(loseTrades.reduce((a, b) => a + b.profit, 0).toFixed(2));
 
     card.innerHTML += `<h2>TRADE SUMMARY</h2>`;
-    card.innerHTML += `<p>Winning Trades: ${winTrades.length}, Net Profit: ₹${winAmount}</p>`;
-    card.innerHTML += `<p>Losing Trades: ${loseTrades.length}, Net Loss: ₹${loseAmount}</p>`;
-    card.innerHTML += `<h2>Total Profit/Loss: ₹${winAmount + loseAmount}</h2>`;
+    card.innerHTML += `<h2 class="subheading">Winning Trades</h2>`;
+    card.innerHTML += `<p>Trades: ${winTrades.length}, Net Profit: ₹${winAmount}</p>`;
+    card.innerHTML += `<p class="success">${(winAmount/winTrades.length).toFixed(2)} profit per trade</p>`
+    card.innerHTML += `<hr>`
+    card.innerHTML += `<h2 class="subheading">Losing Trades</h2>`;
+    card.innerHTML += `<p>Trades: ${loseTrades.length}, Net Loss: ₹${loseAmount}</p>`;
+    card.innerHTML += `<p class="danger">${(loseAmount/loseTrades.length).toFixed(2)} loss per trade</p>`
+    card.innerHTML += `<hr>`
+    card.innerHTML += `<h2>Total: ₹${winAmount + loseAmount} (${winTrades.length + loseTrades.length} trades)</h2>`;
   }
   document.body.appendChild(card);
 }
@@ -187,6 +196,7 @@ function tradeOverview(allTrades = [new Trade({})]) {
 }
 
 function createRow(trade) {
+  runningPnL += trade.profit;
   return `
         <tr class="${trade.isWin ? "win" : "loss"}">
             <td>
@@ -199,8 +209,11 @@ function createRow(trade) {
                 ${trade.pts}
             </td>
             <td>
-            ${trade.percentageChange}%
-        </td>
+              ${trade.percentageChange}%
+            </td>
+            <td>
+              ₹${runningPnL}
+            </td>
         </tr>
     `;
 }
@@ -212,6 +225,13 @@ function createHeading() {
             <th scope="col">Profit</th>
             <th scope="col">Points</th>
             <th scope="col">% gained</th>
+            <th scope="col">PnL Running</th>
         </tr>
     `;
+}
+// Not functional yet
+function hideAll(){
+  if(globalTableRef !== null){
+    globalTableRef.remove()
+  }
 }

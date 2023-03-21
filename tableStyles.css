@@ -9,6 +9,31 @@
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.201);
 
 }
+h2 {
+  font-weight: 700;
+  margin: 0px;
+}
+h2.subheading {
+  font-weight: 700;
+  color: rgb(85, 85, 85);
+  font-size: 14px;
+  text-transform: uppercase;  
+  
+  
+}
+.summary-card p{
+  margin: 0;
+}
+
+.success {
+  color: rgb(20, 168, 20);
+  margin-bottom: 10px;
+}
+
+.danger {
+  color: rgb(168, 20, 20);
+  margin-bottom: 10px;
+}
 .summary-container {
   position: fixed;
   z-index: 10;
