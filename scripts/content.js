@@ -159,19 +159,32 @@ function createTradeSummary(winTrades, loseTrades) {
   if (winTrades.length === 0 && loseTrades.length === 0) {
     card.innerHTML += `<h2>No trades yet.</h2>`;
   } else {
-    const winAmount = Number(winTrades.reduce((a, b) => a + b.profit, 0).toFixed(2));
-    const loseAmount = Number(loseTrades.reduce((a, b) => a + b.profit, 0).toFixed(2));
-
+    const winAmount = Number(
+      winTrades.reduce((a, b) => a + b.profit, 0).toFixed(2)
+    );
+    const loseAmount = Number(
+      loseTrades.reduce((a, b) => a + b.profit, 0).toFixed(2)
+    );
+    let netPoints =
+      winTrades.reduce((a, b) => a + b.pts, 0) +
+      loseTrades.reduce((a, b) => a + b.pts, 0);
     card.innerHTML += `<h2>TRADE SUMMARY</h2>`;
     card.innerHTML += `<h2 class="subheading">Winning Trades</h2>`;
     card.innerHTML += `<p>Trades: ${winTrades.length}, Net Profit: ₹${winAmount}</p>`;
-    card.innerHTML += `<p class="success">${(winAmount/winTrades.length).toFixed(2)} profit per trade</p>`
-    card.innerHTML += `<hr>`
+    card.innerHTML += `<p class="success">${(
+      winAmount / winTrades.length
+    ).toFixed(2)} profit per trade</p>`;
+    card.innerHTML += `<hr>`;
     card.innerHTML += `<h2 class="subheading">Losing Trades</h2>`;
     card.innerHTML += `<p>Trades: ${loseTrades.length}, Net Loss: ₹${loseAmount}</p>`;
-    card.innerHTML += `<p class="danger">${(loseAmount/loseTrades.length).toFixed(2)} loss per trade</p>`
-    card.innerHTML += `<hr>`
-    card.innerHTML += `<h2>Total: ₹${winAmount + loseAmount} (${winTrades.length + loseTrades.length} trades)</h2>`;
+    card.innerHTML += `<p class="danger">${(
+      loseAmount / loseTrades.length
+    ).toFixed(2)} loss per trade</p>`;
+    card.innerHTML += `<hr>`;
+    card.innerHTML += `<h2>Total: ₹${winAmount + loseAmount} (${
+      winTrades.length + loseTrades.length
+    } trades)</h2>`;
+    card.innerHTML += `<h2>Net Points: ${netPoints}</h2>`;
   }
   document.body.appendChild(card);
 }
@@ -230,8 +243,8 @@ function createHeading() {
     `;
 }
 // Not functional yet
-function hideAll(){
-  if(globalTableRef !== null){
-    globalTableRef.remove()
+function hideAll() {
+  if (globalTableRef !== null) {
+    globalTableRef.remove();
   }
 }
