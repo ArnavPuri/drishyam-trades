@@ -97,7 +97,6 @@ setTimeout(async () => {
     }
   }
 
-  console.log(allTrades);
   tradeOverview(allTrades);
 }, 1200);
 
@@ -112,8 +111,12 @@ function getOrderData(rowEl) {
   if (price.includes("/")) {
     price = price.split("/")[0].trim();
   }
+  price = price.replace(",", "");
+
   price = Number(price);
-  let timeArr = rowEl.querySelector(".order-timestamp").innerText.split(":");
+  let timeArr = rowEl.querySelector(".order-timestamp")
+    ? rowEl.querySelector(".order-timestamp").innerText.split(":")
+    : [0, 0, 0];
 
   let time = new Date();
   time.setHours(timeArr[0]);
@@ -124,6 +127,7 @@ function getOrderData(rowEl) {
   let instrument = rowEl.querySelector(".instrument").innerText;
   instrument = instrument.replace(/ NFO /gi, "");
   instrument = instrument.replace(/ w /g, "");
+  console.log( { quantity, price, time, type, status, instrument })
   return { quantity, price, time, type, status, instrument };
 }
 const cleanTimeStr = (timeStr = "") => {
